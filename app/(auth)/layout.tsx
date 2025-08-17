@@ -32,7 +32,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
             width={40}
             height={40}
           />
-          <span className="font-heading text-3xl">Redemy</span>
+          <span className="font-heading text-3xl font-medium">Redemy</span>
         </Link>
 
         {/* Page Content */}

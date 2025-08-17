@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import ToasterTheme from "@/components/ui/toaster-theme";
 
 const chillax = localFont({
   src: [
@@ -52,6 +53,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+
+          <ToasterTheme />
         </ThemeProvider>
       </body>
     </html>
