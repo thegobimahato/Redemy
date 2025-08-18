@@ -54,7 +54,7 @@ const VerifyRequest = () => {
     <Card className="mx-auto w-full">
       <CardHeader className="text-center">
         <CardTitle className="text-xl">Please check your email</CardTitle>
-        <CardDescription>
+        <CardDescription className="text-pretty">
           We have sent a verification code to your email address. Please open
           the email and paste the code below.
         </CardDescription>
