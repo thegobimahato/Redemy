@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -30,7 +31,6 @@ import { Input } from "@/components/ui/input";
 
 import GithubIcon from "@/components/icons/github-stroke-rounded";
 import GoogleIcon from "@/components/icons/google-stroke-rounded";
-
 import { authClient } from "@/lib/auth-client";
 
 const formSchema = z.object({
@@ -43,13 +43,12 @@ const LoginForm = () => {
   const [emailPending, startEmailTransition] = useTransition();
 
   const router = useRouter();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: "" },
   });
 
-  // -------- GitHub Login --------
+  // GitHub Login
   async function signInWithGithub() {
     startGithubTransition(async () => {
       await authClient.signIn.social({
@@ -57,7 +56,7 @@ const LoginForm = () => {
         callbackURL: "/",
         fetchOptions: {
           onSuccess: () => {
-            toast.success("Signed in with GitHub, you will be redirected...");
+            toast.success("Signed in with GitHub, redirecting...");
           },
           onError: () => {
             toast.error("Internal server error");
@@ -67,7 +66,7 @@ const LoginForm = () => {
     });
   }
 
-  // -------- Google Login --------
+  // Google Login
   async function signInWithGoogle() {
     startGoogleTransition(async () => {
       await authClient.signIn.social({
@@ -75,7 +74,7 @@ const LoginForm = () => {
         callbackURL: "/",
         fetchOptions: {
           onSuccess: () => {
-            toast.success("Signed in with Google, you will be redirected...");
+            toast.success("Signed in with Google, redirecting...");
           },
           onError: () => {
             toast.error("Internal server error");
@@ -85,7 +84,7 @@ const LoginForm = () => {
     });
   }
 
-  // -------- Email Login --------
+  // Email Login
   async function signInWithEmail(values: z.infer<typeof formSchema>) {
     startEmailTransition(async () => {
       await authClient.emailOtp.sendVerificationOtp({
@@ -94,9 +93,14 @@ const LoginForm = () => {
         fetchOptions: {
           onSuccess: () => {
             toast.success("Verification email sent.");
-            router.push(
-              `/verify-request?email=${encodeURIComponent(values.email)}`,
-            );
+
+            const encoded = encodeURIComponent(values.email);
+            const decoded = values.email;
+
+            router.push(`/verify-request?email=${encoded}`);
+            router.replace(`/verify-request?email=${decoded}`, {
+              scroll: false,
+            });
           },
           onError: () => {
             toast.error("Error sending email");
@@ -107,112 +111,103 @@ const LoginForm = () => {
   }
 
   return (
-    <>
-      <Card className="mx-auto w-full max-w-md shadow-md">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">Welcome Back!</CardTitle>
-          <CardDescription>
-            Sign in to continue your learning journey
-          </CardDescription>
-        </CardHeader>
+    <Card className="border-border/50 bg-background/60 relative w-full overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-xl">
+      {/* Glow Accent */}
+      <div className="bg-primary/40 absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full blur-3xl" />
 
-        <CardContent className="flex flex-col gap-4">
-          {/* Social Logins */}
-          <Button
-            onClick={signInWithGithub}
-            disabled={githubPending}
-            variant="outline"
-            className="w-full gap-2"
-          >
-            {githubPending ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <>
-                <GithubIcon />
-                Sign in with GitHub
-              </>
-            )}
-          </Button>
-
-          <Button
-            onClick={signInWithGoogle}
-            disabled={googlePending}
-            variant="outline"
-            className="w-full gap-2"
-          >
-            {googlePending ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <>
-                <GoogleIcon />
-                Sign in with Google
-              </>
-            )}
-          </Button>
-
-          {/* Divider */}
-          <div className="relative flex items-center">
-            <div className="border-border flex-grow border-t" />
-            <span className="bg-card text-muted-foreground px-3 text-sm">
-              Or continue with
-            </span>
-            <div className="border-border flex-grow border-t" />
-          </div>
-
-          {/* Email Login */}
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(signInWithEmail)}
-              className="grid gap-3"
-            >
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="john.doe@gmail.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button type="submit" disabled={emailPending} className="w-full">
-                {emailPending ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <span>Continue with Email</span>
-                )}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-
-      {/* Terms */}
-      <p className="text-muted-foreground text-center text-sm text-balance">
-        By clicking continue, you agree to our{" "}
-        <Link
-          href="/terms"
-          className="hover:text-primary transition hover:underline hover:underline-offset-4"
-        >
-          Terms of Service
-        </Link>{" "}
-        and{" "}
-        <Link
-          href="/privacy"
-          className="hover:text-primary transition hover:underline hover:underline-offset-4"
-        >
-          Privacy Policy
+      <CardHeader className="space-y-2 text-center">
+        <Link href="/" className="mx-auto flex flex-col items-center gap-2">
+          <Image src="/logo.svg" alt="Redemy Logo" width={48} height={48} />
         </Link>
-      </p>
-    </>
+        <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+        <CardDescription>
+          Sign in to continue your learning journey
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-4">
+        {/* Social Buttons */}
+        <Button
+          onClick={signInWithGithub}
+          disabled={githubPending}
+          variant="outline"
+          className="w-full gap-2 rounded-xl"
+        >
+          {githubPending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <>
+              <GithubIcon />
+              Continue with GitHub
+            </>
+          )}
+        </Button>
+
+        <Button
+          onClick={signInWithGoogle}
+          disabled={googlePending}
+          variant="outline"
+          className="w-full gap-2 rounded-xl"
+        >
+          {googlePending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <>
+              <GoogleIcon />
+              Continue with Google
+            </>
+          )}
+        </Button>
+
+        {/* Divider */}
+        <div className="relative flex items-center py-2">
+          <div className="border-border flex-grow border-t" />
+          <span className="bg-background text-muted-foreground px-3 text-xs">
+            OR
+          </span>
+          <div className="border-border flex-grow border-t" />
+        </div>
+
+        {/* Email Form */}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(signInWithEmail)}
+            className="grid gap-3"
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="john.doe@gmail.com"
+                      {...field}
+                      className="rounded-xl"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              disabled={emailPending}
+              className="w-full rounded-xl"
+            >
+              {emailPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                "Continue with Email"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 };
 
