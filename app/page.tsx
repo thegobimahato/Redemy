@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 export default function Home() {
   const { data: session } = authClient.useSession();
@@ -36,7 +38,7 @@ export default function Home() {
           </Button>
         </div>
       ) : (
-        <Link href={"/login"}>
+        <Link href="/login">
           <Button className="mt-6">Login</Button>
         </Link>
       )}

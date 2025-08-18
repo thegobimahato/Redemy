@@ -37,24 +37,6 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
 
         {/* Page Content */}
         {children}
-
-        {/* Terms */}
-        <p className="text-muted-foreground text-center text-sm text-balance">
-          By clicking continue, you agree to our{" "}
-          <Link
-            href="/terms"
-            className="hover:text-primary transition hover:underline hover:underline-offset-4"
-          >
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link
-            href="/privacy"
-            className="hover:text-primary transition hover:underline hover:underline-offset-4"
-          >
-            Privacy Policy
-          </Link>
-        </p>
       </div>
     </div>
   );
