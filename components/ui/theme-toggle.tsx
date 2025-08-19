@@ -1,58 +1,43 @@
 "use client";
 
-import * as React from "react";
-import { Moon, Sun, Laptop2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { MoonIcon, SunIcon } from "lucide-react";
+import { Toggle } from "@/components/ui/toggle";
 
-export function ThemeToggle() {
-  const { setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+const ThemeToggle = () => {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Prevent hydration mismatch
+  useEffect(() => setMounted(true), []);
 
-  if (!mounted) {
-    // Prevent hydration mismatch
-    return (
-      <Button variant="outline" size="icon" aria-label="Toggle theme" disabled>
-        <Moon className="h-[1.2rem] w-[1.2rem]" />
-      </Button>
-    );
-  }
+  if (!mounted) return null;
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
+    <Toggle
+      variant="outline"
+      className="group data-[state=on]:hover:bg-muted size-9 data-[state=on]:bg-transparent"
+      pressed={theme === "dark"}
+      onPressedChange={() => setTheme(theme === "dark" ? "light" : "dark")}
+      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+    >
+      {/* Dark mode icon */}
+      <MoonIcon
+        size={16}
+        className="shrink-0 scale-0 opacity-0 transition-all group-data-[state=on]:scale-100 group-data-[state=on]:opacity-100"
+        aria-hidden="true"
+      />
 
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          <Sun className="mr-1 size-4" />
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          <Moon className="mr-1 size-4" />
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          <Laptop2 className="mr-1 size-4" />
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      {/* Light mode icon */}
+      <SunIcon
+        size={16}
+        className="absolute shrink-0 scale-100 opacity-100 transition-all group-data-[state=on]:scale-0 group-data-[state=on]:opacity-0"
+        aria-hidden="true"
+      />
+    </Toggle>
   );
-}
+};
+
+export default ThemeToggle;
