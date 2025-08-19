@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,24 +32,28 @@ import { Input } from "@/components/ui/input";
 
 import GithubIcon from "@/components/icons/github-stroke-rounded";
 import GoogleIcon from "@/components/icons/google-stroke-rounded";
+
 import { authClient } from "@/lib/auth-client";
 
+// -------------------- Schema --------------------
 const formSchema = z.object({
   email: z.email("Please enter a valid email address."),
 });
 
+// -------------------- Component --------------------
 const LoginForm = () => {
   const [githubPending, startGithubTransition] = useTransition();
   const [googlePending, startGoogleTransition] = useTransition();
   const [emailPending, startEmailTransition] = useTransition();
 
   const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: "" },
   });
 
-  // GitHub Login
+  // -------------------- GitHub Login --------------------
   async function signInWithGithub() {
     startGithubTransition(async () => {
       await authClient.signIn.social({
@@ -66,7 +71,7 @@ const LoginForm = () => {
     });
   }
 
-  // Google Login
+  // -------------------- Google Login --------------------
   async function signInWithGoogle() {
     startGoogleTransition(async () => {
       await authClient.signIn.social({
@@ -84,7 +89,7 @@ const LoginForm = () => {
     });
   }
 
-  // Email Login
+  // -------------------- Email Login --------------------
   async function signInWithEmail(values: z.infer<typeof formSchema>) {
     startEmailTransition(async () => {
       await authClient.emailOtp.sendVerificationOtp({
@@ -110,6 +115,7 @@ const LoginForm = () => {
     });
   }
 
+  // -------------------- UI --------------------
   return (
     <Card className="border-border/50 bg-background/60 relative w-full overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-xl">
       {/* Glow Accent */}

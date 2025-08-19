@@ -2,6 +2,8 @@
 
 import React, { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -21,8 +23,6 @@ import {
 } from "@/components/ui/input-otp";
 
 import { authClient } from "@/lib/auth-client";
-import Link from "next/link";
-import Image from "next/image";
 
 const EmailVerifyForm = () => {
   const [otp, setOtp] = useState("");
@@ -35,6 +35,7 @@ const EmailVerifyForm = () => {
 
   const isOtpCompleted = otp.length === 6;
 
+  // Verify OTP
   const verifyOtp = () => {
     startOtpTransition(async () => {
       await authClient.signIn.emailOtp({
@@ -53,6 +54,7 @@ const EmailVerifyForm = () => {
     });
   };
 
+  // Resend OTP
   const resendOtp = () => {
     startResendTransition(async () => {
       try {
@@ -69,7 +71,7 @@ const EmailVerifyForm = () => {
 
   return (
     <Card className="border-border/50 bg-background/60 relative w-full max-w-md overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-xl">
-      {/* Glow Accents */}
+      {/* Glow Accent */}
       <div className="bg-primary/40 absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full blur-3xl" />
 
       <CardHeader className="space-y-3 text-center">
@@ -123,9 +125,7 @@ const EmailVerifyForm = () => {
               className="text-primary flex items-center gap-1 font-medium underline-offset-4 hover:underline"
             >
               {resendPending ? (
-                <>
-                  <Loader2 className="size-3 animate-spin" />
-                </>
+                <Loader2 className="size-3 animate-spin" />
               ) : (
                 "Resend"
               )}

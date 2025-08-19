@@ -1,7 +1,7 @@
-import EmailVerifyForm from "../login/_commponents/EmailVerifyForm";
+import EmailVerifyForm from "../_commponents/EmailVerifyForm";
 
 export const metadata = {
-  title: "Verify Your Email",
+  title: "Verify Email",
   description: "Enter the code sent to your email to verify your account.",
 };
 
