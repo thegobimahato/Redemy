@@ -3,10 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { authClient } from "@/lib/auth-client";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import ThemeToggle from "@/components/ui/theme-toggle";
+
+import { authClient } from "@/lib/auth-client";
+
 import UserDropdown from "./UserDropdown";
 
 const navigationItems = [

@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+
+import { useLogout } from "@/hooks/use-logout";
 import { BookOpen, Home, LayoutDashboard, LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,10 +16,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
 
 interface UserDropdownProps {
   name: string;
@@ -25,18 +24,7 @@ interface UserDropdownProps {
 }
 
 const UserDropdown = ({ name, email, image }: UserDropdownProps) => {
-  const router = useRouter();
-
-  async function signOut() {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/");
-          toast.success("Signed out successfully!");
-        },
-      },
-    });
-  }
+  const handleLogout = useLogout();
 
   return (
     <DropdownMenu>
@@ -91,7 +79,7 @@ const UserDropdown = ({ name, email, image }: UserDropdownProps) => {
         <DropdownMenuSeparator />
 
         {/* Logout */}
-        <DropdownMenuItem onClick={signOut}>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOut size={16} className="opacity-60" />
           <span>Logout</span>
         </DropdownMenuItem>

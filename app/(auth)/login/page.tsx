@@ -1,8 +1,9 @@
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
+
 import LoginForm from "../_commponents/LoginForm";
-import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Login",

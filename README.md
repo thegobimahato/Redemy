@@ -1,1 +1,1 @@
-# Redemy - A Modern LMS 
+# Redemy - A Modern LMS

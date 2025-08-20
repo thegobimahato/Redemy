@@ -82,7 +82,7 @@ export function EmailTemplate({ firstName, otp }: EmailTemplateProps) {
                     This code will expire in 5 minutes.
                   </p>
                   <p style={{ fontSize: "12px", color: "#888" }}>
-                    If you didn't request this, you can safely ignore this
+                    If you didn&apos;t request this, you can safely ignore this
                     email.
                   </p>
                 </td>

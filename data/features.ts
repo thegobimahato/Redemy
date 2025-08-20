@@ -1,4 +1,4 @@
-import { BookOpen, BarChart3, Users2, MonitorPlay } from "lucide-react";
+import { BarChart3, BookOpen, MonitorPlay, Users2 } from "lucide-react";
 
 export interface FeatureProps {
   title: string;

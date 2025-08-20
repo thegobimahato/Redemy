@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
+import { useState, useTransition } from "react";
 
-import { toast } from "sonner";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -65,6 +66,7 @@ const EmailVerifyForm = () => {
         toast.success("Verification code resent");
       } catch (err) {
         toast.error("Failed to resend code. Please try again.");
+        console.log("Error in resend code", err);
       }
     });
   };

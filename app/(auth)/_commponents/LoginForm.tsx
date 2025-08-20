@@ -1,17 +1,19 @@
 "use client";
 
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
+import GithubIcon from "@/components/icons/github-stroke-rounded";
+import GoogleIcon from "@/components/icons/google-stroke-rounded";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -29,9 +31,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import GithubIcon from "@/components/icons/github-stroke-rounded";
-import GoogleIcon from "@/components/icons/google-stroke-rounded";
 
 import { authClient } from "@/lib/auth-client";
 

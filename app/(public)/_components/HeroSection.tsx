@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+
 import { authClient } from "@/lib/auth-client";
 
 const HeroSection = () => {

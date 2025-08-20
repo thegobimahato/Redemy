@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { useTheme } from "next-themes";
 
 import { MoonIcon, SunIcon } from "lucide-react";
+
 import { Toggle } from "@/components/ui/toggle";
 
 const ThemeToggle = () => {

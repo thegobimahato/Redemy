@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import { features } from "@/data/features";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const FeaturesCard = () => {
   return (

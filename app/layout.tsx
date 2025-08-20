@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
 
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import ToasterTheme from "@/components/ui/toaster-theme";
+
+import "./globals.css";
 
 const chillax = localFont({
   src: [
