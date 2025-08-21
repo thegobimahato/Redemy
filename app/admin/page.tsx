@@ -4,6 +4,12 @@ import { SectionCards } from "@/components/sidebar/section-cards";
 
 import data from "./data.json";
 
+export const metadata = {
+  title: "Admin Dashboard",
+  description:
+    "Manage courses, users, and settings in the Redemy admin dashboard.",
+};
+
 const AdminIndexPage = () => {
   return (
     <>
