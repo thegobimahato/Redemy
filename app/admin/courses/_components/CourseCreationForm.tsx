@@ -7,6 +7,7 @@ import { IconArrowLeftDashed, IconSparkles } from "@tabler/icons-react";
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
 
+import RichTextEditor from "@/components/rich-text-editor/Editor";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -84,7 +85,7 @@ const CourseCreationForm = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Basic Information</CardTitle>
+          <CardTitle className="text-xl">Basic Information</CardTitle>
           <CardDescription>
             Provide the basic details about this course
           </CardDescription>
@@ -131,14 +132,14 @@ const CourseCreationForm = () => {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-fit gap-2 rounded-md border border-dashed border-primary/40 hover:bg-primary/10 dark:hover:bg-primary/20 active:scale-[0.97] transition-all duration-200 group"
+                    className="w-fit gap-2 rounded-md border border-dashed border-primary/40  active:scale-[0.97] transition-all duration-200 group"
                     onClick={() => {
                       const titleValue = form.getValues("title");
                       const slug = slugify(titleValue);
                       form.setValue("slug", slug, { shouldValidate: true });
                     }}
                   >
-                    <IconSparkles className="size-4 text-muted-foreground group-hover:text-primary" />
+                    <IconSparkles className="size-4 text-muted-foreground group-hover:text-white" />
                     <span>Generate Slug</span>
                   </Button>
                 </div>
@@ -171,11 +172,7 @@ const CourseCreationForm = () => {
                   <FormItem className="w-full">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Enter description"
-                        className="min-h-[120px]"
-                        {...field}
-                      />
+                      <RichTextEditor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

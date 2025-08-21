@@ -44,7 +44,7 @@ const UserDropdown = ({ name, email, image }: UserDropdownProps) => {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="max-w-64" align="end" sideOffset={8}>
+      <DropdownMenuContent className="min-w-48" align="end" sideOffset={8}>
         {/* User Info */}
         <DropdownMenuLabel className="flex flex-col">
           <span className="truncate text-sm font-medium">{name}</span>

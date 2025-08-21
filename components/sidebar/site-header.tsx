@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
-import GlobalSearch from "./global-search";
+import GlobalSearch from "../general/global-search";
 
 export function SiteHeader() {
   return (
