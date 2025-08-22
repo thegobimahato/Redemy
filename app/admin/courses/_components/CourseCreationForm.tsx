@@ -7,6 +7,7 @@ import { IconArrowLeftDashed, IconSparkles } from "@tabler/icons-react";
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
 
+import Uploader from "@/components/file-uploader/Uploader";
 import RichTextEditor from "@/components/rich-text-editor/Editor";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -187,7 +188,8 @@ const CourseCreationForm = () => {
                   <FormItem className="w-full">
                     <FormLabel>Thumbnail Image</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter thumbnail url" {...field} />
+                      <Uploader />
+                      {/* <Input placeholder="Enter thumbnail url" {...field} /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
