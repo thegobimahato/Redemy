@@ -5,9 +5,6 @@ import * as React from "react";
 // --- Hooks ---
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor";
-// --- Tiptap UI ---
-import type { UseLinkPopoverConfig } from "@/link-popover";
-import { useLinkPopover } from "@/link-popover";
 import type { Editor } from "@tiptap/react";
 
 // --- Icons ---
@@ -36,6 +33,9 @@ import {
   PopoverTrigger,
 } from "@/components/rich-text-editor/tiptap-ui-primitive/popover";
 import { Separator } from "@/components/rich-text-editor/tiptap-ui-primitive/separator";
+// --- Tiptap UI ---
+import type { UseLinkPopoverConfig } from "@/components/rich-text-editor/tiptap-ui/link-popover";
+import { useLinkPopover } from "@/components/rich-text-editor/tiptap-ui/link-popover";
 
 export interface LinkMainProps {
   /**

@@ -189,7 +189,6 @@ const CourseCreationForm = () => {
                     <FormLabel>Thumbnail Image</FormLabel>
                     <FormControl>
                       <Uploader />
-                      {/* <Input placeholder="Enter thumbnail url" {...field} /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>

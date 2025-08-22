@@ -1,6 +1,5 @@
-"use client";
-
 import { useCallback, useState } from "react";
+
 import { FileRejection, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 import { v4 as uuidV4 } from "uuid";
@@ -33,6 +32,42 @@ const Uploader = () => {
     fileType: "image",
   });
 
+  const uploadFile = async (file: File) => {
+    setFileState((prev) => ({
+      ...prev,
+      uploading: true,
+      progress: 0,
+    }));
+
+    try {
+      // get presigned URL
+      const presignedResponse = await fetch("/api/s3/upload", {
+        method: "POST",
+        headers: { "Content-Type ": "application/json" },
+        body: JSON.stringify({
+          fileName: file.name,
+          contentType: file.type,
+          size: file.size,
+          isImage: true,
+        }),
+      });
+
+      if (!presignedResponse.ok) {
+        toast.error("Failed to get presigned URL");
+        setFileState((prev) => ({
+          ...prev,
+          uploading: false,
+          progress: 0,
+          error: true,
+        }));
+
+        return;
+      }
+
+      const { presignedUrl, key } = await presignedResponse.json();
+    } catch (error) {}
+  };
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
@@ -47,16 +82,10 @@ const Uploader = () => {
         isDeleting: false,
         fileType: "image",
       });
+
+      uploadFile(file);
     }
   }, []);
-
-  const uploadFile = (file: File) => {
-    setFileState((prev) => ({
-      ...prev,
-      uploading: true,
-      progress: 0,
-    }));
-  };
 
   const rejectedFiles = (fileRejection: FileRejection[]) => {
     if (fileRejection.length) {

@@ -7,10 +7,10 @@ import { BlockquoteButton } from "@/components/rich-text-editor/tiptap-ui/blockq
 import { MarkButton } from "@/components/rich-text-editor/tiptap-ui/mark-button";
 import { Button } from "@/components/ui/button";
 
-import { LinkPopover } from "../../link-popover";
 import { CodeBlockButton } from "./tiptap-ui/code-block-button";
 import { ColorHighlightPopover } from "./tiptap-ui/color-highlight-popover";
 import { HeadingDropdownMenu } from "./tiptap-ui/heading-dropdown-menu";
+import { LinkPopover } from "./tiptap-ui/link-popover";
 import { ListDropdownMenu } from "./tiptap-ui/list-dropdown-menu";
 import { TextAlignButton } from "./tiptap-ui/text-align-button";
 import { UndoRedoButton } from "./tiptap-ui/undo-redo-button";
