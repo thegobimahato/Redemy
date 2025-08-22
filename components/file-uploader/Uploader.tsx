@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useState } from "react";
 
 import { FileRejection, useDropzone } from "react-dropzone";
@@ -43,7 +45,7 @@ const Uploader = () => {
       // get presigned URL
       const presignedResponse = await fetch("/api/s3/upload", {
         method: "POST",
-        headers: { "Content-Type ": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fileName: file.name,
           contentType: file.type,
@@ -65,7 +67,59 @@ const Uploader = () => {
       }
 
       const { presignedUrl, key } = await presignedResponse.json();
-    } catch (error) {}
+
+      await new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percentageCompleted = (event.loaded / event.total) * 100;
+            setFileState((prev) => ({
+              ...prev,
+              progress: Math.round(percentageCompleted),
+            }));
+          }
+        };
+
+        xhr.onload = () => {
+          console.log("Tigris response:", xhr.status, xhr.responseText);
+          if (xhr.status === 200 || xhr.status === 204) {
+            setFileState((prev) => ({
+              ...prev,
+              progress: 100,
+              uploading: false,
+              key: key,
+            }));
+
+            toast.success("File uploaded successfully");
+            resolve();
+          } else {
+            toast.error(`Upload failed...: ${xhr.status}`);
+            reject(
+              new Error(`Upload failed: ${xhr.status} ${xhr.responseText}`),
+            );
+          }
+        };
+
+        xhr.onerror = () => {
+          reject(new Error("Upload failed"));
+        };
+
+        xhr.open("PUT", presignedUrl);
+        xhr.setRequestHeader("Content-Type", file.type);
+        xhr.send(file);
+      });
+    } catch (error) {
+      console.error("Something went wrong", error);
+      toast.error("Something went wrong");
+
+      setFileState((prev) => ({
+        ...prev,
+        error: true,
+        progress: 0,
+        uploading: false,
+      }));
+    }
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -93,6 +147,10 @@ const Uploader = () => {
         (rejection) => rejection.errors[0].code === "too-many-files",
       );
 
+      if (tooManyFiles) {
+        toast.error("Too many files selected, max is 1");
+      }
+
       const filesSizeToBig = fileRejection.find(
         (rejection) => rejection.errors[0].code === "file-too-large",
       );
@@ -100,11 +158,23 @@ const Uploader = () => {
       if (filesSizeToBig) {
         toast.error("File size exceeds the limit, Max is 5MB");
       }
-
-      if (tooManyFiles) {
-        toast.error("Too many files selected, max is 1");
-      }
     }
+  };
+
+  const renderContent = () => {
+    if (fileState.uploading) {
+      return <h1>Uploading...</h1>;
+    }
+
+    if (fileState.error) {
+      return <RenderErrorState />;
+    }
+
+    if (fileState.objectUrl) {
+      return <h1>Upload file</h1>;
+    }
+
+    return <RenderEmptyState isDragActive={isDragActive} />;
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -128,11 +198,7 @@ const Uploader = () => {
     >
       <CardContent className="flex items-center justify-center w-full h-full p-6">
         <input {...getInputProps()} />
-        {fileState.error ? (
-          <RenderErrorState />
-        ) : (
-          <RenderEmptyState isDragActive={isDragActive} />
-        )}
+        {renderContent()}
       </CardContent>
     </Card>
   );

@@ -15,6 +15,7 @@ export async function POST(request: Request) {
     const validation = fileUploadSchema.safeParse(body);
 
     if (!validation.success) {
+      console.error("Invalid body", validation.error);
       return NextResponse.json(
         { error: "Invalid Request Body" },
         { status: 400 },
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Failed to generated presignedURL", error);
     return NextResponse.json(
-      { error: "Failed to generated presignedUrl" },
+      { error: "Failed to generate upload URL" },
       { status: 500 },
     );
   }

@@ -184,7 +184,7 @@ const CourseCreationForm = () => {
               <FormField
                 control={form.control}
                 name="fileKey"
-                render={({ field }) => (
+                render={() => (
                   <FormItem className="w-full">
                     <FormLabel>Thumbnail Image</FormLabel>
                     <FormControl>
