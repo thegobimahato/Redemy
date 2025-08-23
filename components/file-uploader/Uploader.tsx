@@ -165,7 +165,6 @@ export function Uploader({ value, onChange, fileTypeAccepted }: UploaderProps) {
         });
 
         console.log("Log 4 (on drop)", fileState);
-        
 
         uploadFile(file);
       }

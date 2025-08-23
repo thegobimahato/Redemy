@@ -1,11 +1,17 @@
 "use client";
 
-import Link from "next/link";
+import { useTransition } from "react";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { tryCatch } from "@/hooks/try-catch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconArrowLeftDashed, IconSparkles } from "@tabler/icons-react";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
+import { toast } from "sonner";
 
 import { Uploader } from "@/components/file-uploader/Uploader";
 import RichTextEditor from "@/components/rich-text-editor/Editor";
@@ -43,7 +49,13 @@ import {
   courseStatus,
 } from "@/lib/zodSchemas";
 
+import { CreateCourse } from "../create/action";
+
 const CourseCreationForm = () => {
+  const [pending, startTransition] = useTransition();
+
+  const router = useRouter();
+
   // Setup form with Zod validation
   const form = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
@@ -64,6 +76,21 @@ const CourseCreationForm = () => {
   // Handle form submit
   const onSubmit = (values: CourseSchemaType) => {
     console.log("Submitted values:", values);
+    startTransition(async () => {
+      const { data: result, error } = await tryCatch(CreateCourse(values));
+
+      if (error) {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+
+      if (result?.status === "success") {
+        toast.success(result?.message);
+        form.reset();
+        router.push("/admin/courses");
+      } else if (result?.status === "error") {
+        toast.error(result.message);
+      }
+    });
   };
 
   return (
@@ -136,7 +163,7 @@ const CourseCreationForm = () => {
                     className="w-fit gap-2 rounded-md border border-dashed border-primary/40  active:scale-[0.97] transition-all duration-200 group"
                     onClick={() => {
                       const titleValue = form.getValues("title");
-                      const slug = slugify(titleValue);
+                      const slug = slugify(titleValue).toLowerCase();
                       form.setValue("slug", slug, { shouldValidate: true });
                     }}
                   >
@@ -328,7 +355,16 @@ const CourseCreationForm = () => {
               />
 
               {/* Submit */}
-              <Button type="submit">Create Course</Button>
+              <Button type="submit" disabled={pending}>
+                {pending ? (
+                  <>
+                    <Loader2 className="animate-spin mr-1" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Course"
+                )}
+              </Button>
             </form>
           </Form>
         </CardContent>
