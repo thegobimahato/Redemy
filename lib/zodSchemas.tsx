@@ -73,7 +73,7 @@ export type CourseSchemaType = z.infer<typeof courseSchema>;
 
 export const fileUploadSchema = z.object({
   fileName: z.string().min(1, { message: "Filename is required" }),
-  contentType: z.string().min(1, { message: "Content Type is required" }),
+  contentType: z.string().min(1, { message: "Content type is required" }),
   size: z.number().min(1, { message: "Size is required" }),
   isImage: z.boolean(),
 });

@@ -7,7 +7,7 @@ import { IconArrowLeftDashed, IconSparkles } from "@tabler/icons-react";
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
 
-import Uploader from "@/components/file-uploader/Uploader";
+import { Uploader } from "@/components/file-uploader/Uploader";
 import RichTextEditor from "@/components/rich-text-editor/Editor";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -184,11 +184,15 @@ const CourseCreationForm = () => {
               <FormField
                 control={form.control}
                 name="fileKey"
-                render={() => (
+                render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Thumbnail Image</FormLabel>
                     <FormControl>
-                      <Uploader />
+                      <Uploader
+                        onChange={field.onChange}
+                        value={field.value}
+                        fileTypeAccepted="image"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
