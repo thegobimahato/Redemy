@@ -1,27 +1,54 @@
 "use server";
 
-import { headers } from "next/headers";
+import { requireAdmin } from "@/data/admin/require-admin";
+import { request } from "@arcjet/next";
 
-import { auth } from "@/lib/auth";
+import arcjet, { detectBot, fixedWindow } from "@/lib/arject";
 import prisma from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import { CourseSchemaType, courseSchema } from "@/lib/zodSchemas";
 
+const aj = arcjet
+  .withRule(
+    detectBot({
+      mode: "LIVE",
+      allow: [],
+    }),
+  )
+  .withRule(
+    fixedWindow({
+      mode: "LIVE",
+      window: "1m",
+      max: 5,
+    }),
+  );
+
 export async function CreateCourse(
   values: CourseSchemaType,
 ): Promise<ApiResponse> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user?.id) {
-    return {
-      status: "error",
-      message: "Unauthorized",
-    };
-  }
+  const session = await requireAdmin();
 
   try {
+    const req = await request();
+
+    const decision = await aj.protect(req, {
+      fingerprint: session?.user.id,
+    });
+
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        return {
+          status: "error",
+          message: "You have been blocked due to rate limiting",
+        };
+      } else {
+        return {
+          status: "error",
+          message: "You are a bot! Get Away",
+        };
+      }
+    }
+
     const validation = courseSchema.safeParse(values);
 
     if (!validation.success) {
